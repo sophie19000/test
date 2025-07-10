@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=350, height=600, initial-scale=1.0" />
+  <title>Wallet Options</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2; /* arrière-plan gris soft */
+      margin: 0;
+      padding: 0;
+      width: 350px;
+      height: 600px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      text-decoration: none;
+      color: black;
+      width: 100%;
+      height: 100px;
+      transition: transform 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    .card-content {
+      flex-grow: 1;
+      padding-right: 12px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .new-badge {
+      background-color: #00c47c;
+      color: white;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 6px;
+      margin-left: 8px;
+    }
+
+    .card-description {
+      font-size: 12px;
+      color: #666;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    .icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #e0e0e0;
+    }
+
+    .icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <a href="keyless.html" class="card">
+      <div class="card-content">
+        <div class="card-title">Keyless entry <span class="new-badge">New</span></div>
+        <div class="card-description">Syncing a keyless wallet with an extension</div>
+      </div>
+      <div class="icon"><img src="keyless.svg" alt="keyless icon"></div>
+    </a>
+
+    <a href="keyless.html" class="card">
+      <div class="card-content">
+        <div class="card-title">Importing a wallet</div>
+        <div class="card-description">Enter the private key or a 12, 15, 18, 21, or 24-word SEED phrase</div>
+      </div>
+      <div class="icon"><img src="import.svg" alt="import icon"></div>
+    </a>
+
+    <a href="keyless.html" class="card">
+      <div class="card-content">
+        <div class="card-title">Hardware Wallet</div>
+        <div class="card-description">Connect the hardware wallet by scanning the QR code or via USB</div>
+      </div>
+      <div class="icon"><img src="hardware.svg" alt="hardware icon"></div>
+    </a>
+
+  </div>
+</body>
+</html>
