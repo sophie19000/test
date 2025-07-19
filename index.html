@@ -129,7 +129,7 @@
       font-size: 14px;
     }
     .submit-btn {
-      background: linear-gradient(90deg, #537cff, #6563ff);
+      background-color: #28a745; /* Vert */
       border: none;
       color: white;
       width: 100%;
@@ -202,12 +202,6 @@
 
       <div class="seed-inputs" id="seedInputs"></div>
 
-      <!-- Checkbox "J'accepte les conditions" -->
-      <div style="margin: 20px 0; font-size: 14px;">
-        <input type="checkbox" id="acceptConditions" />
-        <label for="acceptConditions">J’accepte les <a href="#" target="_blank">conditions</a></label>
-      </div>
-
       <button class="submit-btn" id="submitBtn" onclick="handleConfirm()" disabled>
         Confirm Secret Recovery Phrase
       </button>
@@ -235,8 +229,6 @@
         input.addEventListener("input", checkFieldsFilled);
       });
 
-      // Réinitialiser la checkbox à décochée et bouton désactivé
-      document.getElementById("acceptConditions").checked = false;
       document.getElementById("submitBtn").disabled = true;
     }
 
@@ -252,14 +244,8 @@
         }
       }
 
-      const isChecked = document.getElementById("acceptConditions").checked;
-      document.getElementById("submitBtn").disabled = !(allFilled && isChecked);
+      document.getElementById("submitBtn").disabled = !allFilled;
     }
-
-    // Ecouteur sur la checkbox pour activer/désactiver le bouton
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("acceptConditions").addEventListener("change", checkFieldsFilled);
-    });
 
     function validateBIP39Words() {
       const count = parseInt(document.getElementById("phraseLength").value);
